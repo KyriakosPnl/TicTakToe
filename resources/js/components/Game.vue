@@ -4,8 +4,8 @@
         <div class="square" v-for="n in 9" v-bind:key="n" @click="clickedSquare(n)">
             {{square[n]}}
         </div>
-        </div>
 
+    </div>
     <div v-else id="result">
      <button @click="playAgain()" class="btn btn-lg btn-primary btn-block">Play again!</button> 
       <div>Reload Page to play with diferrent players!</div>
@@ -82,11 +82,7 @@ export default {
         result.value = "Tie";
       }
       if (gameOver.value) {
-        if (
-          !window.confirm(
-            result.value != "Tie" ? result.value + " wins!!!" : "It's a tie!"
-          )
-        ) {
+        if (!window.confirm(result.value != "Tie" ? result.value + " wins!!!" : "It's a tie!")){
           return;
         }
       }
@@ -110,15 +106,13 @@ export default {
 #board {
   height: 400px;
   width: 400px;
-  margin: 50px auto;
-  
+  margin: 50px auto;  
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 .square {
   box-sizing:border-box;
-
   display: inline-block;
   font-family: Verdana, Tahoma, sans-serif;
   text-align: center;
@@ -132,5 +126,7 @@ export default {
   background-color: rgb(96, 161, 158);
   
 }
-     
+.btn{
+    width: 30%
+}     
 </style>
