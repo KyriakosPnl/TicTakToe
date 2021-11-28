@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\CoupleController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::get('add-couple', [CoupleController::class, 'index']);
+Route::post('add-couple', [CoupleController::class, 'store'])->name('add-couple');

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\CoupleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,4 +17,5 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
-Route::get('/a', [CookieController::class, 'assign']);
+//Route::get('add-couple', [CoupleController::class, 'index']);
+//Route::post('/add-couple', [CoupleController::class, 'store'])->name('add-couple');

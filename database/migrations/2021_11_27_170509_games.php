@@ -15,8 +15,13 @@ class Games extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('player_1');
+            $table->foreignId('couple_id')
+                ->onUpdate('cascade')
+                ->onDelete('cascade');
+            $table->string('player_1');    
             $table->string('player_2');
+            $table->string('result');
+            $table->json('moves');
             $table->timestamp('added_at');
             
         });
@@ -29,6 +34,6 @@ class Games extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('games');
     }
 }
