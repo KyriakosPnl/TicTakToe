@@ -3,16 +3,12 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CoupleController;
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+use App\Http\Controllers\GameController;
 
-Route::get('add-couple', [CoupleController::class, 'index']);
-Route::post('add-couple', [CoupleController::class, 'store'])->name('add-couple');
+/*The api routing (stateless) was chosen, because we did not need to use sessions 
+or csrf token that comes with the web routing midleware, due to lack of login system*/
+
+Route::post('couple/add', [CoupleController::class, 'store'])->name('add-couple');
+Route::post('game/add', [GameController::class, 'store'])->name('add-game');
+
+Route::get('game/last/{id}', [GameController::class, 'fetchLast'])->name('last');

@@ -14,19 +14,14 @@ class Games extends Migration
     public function up()
     {
         Schema::create('games', function (Blueprint $table) {
-            $table->increments('id');
-            $table->foreignId('couple_id')
-                ->onUpdate('cascade')
-                ->onDelete('cascade');
-            $table->string('player_1');    
-            $table->string('player_2');
+            $table->increments('id');         
             $table->string('result');
             $table->json('moves');
             $table->timestamp('added_at');
+            $table->foreignId('couple_id');
             
         });
     }
-
     /**
      * Reverse the migrations.
      *

@@ -1,24 +1,24 @@
 <template>
+	
+	<div v-if="!hide" class="wrapper">
+		
+		<form   class="form-signin">   
+			
+			<h2 class="form-signin-heading">Please Enter your names:</h2>
+			<input type="text" class="form-control" name="player_1" v-model="player1" placeholder="(X)  Player_1" required=""  />
+			<br>
+			<input type="text" class="form-control" name="player_2" v-model="player2" placeholder="(O)  Player_2" required=""/>
+			<br>      
+			<button type='button' @click="addCouple()" class="btn btn-lg btn-primary btn-block">Play!</button>  
 
-   <div class="wrapper">
-
-    <form  @submit.prevent="addCouple" class="form-signin">   
-          
-      <h2 class="form-signin-heading">Please Enter your names:</h2>
-      <input type="text" class="form-control" name="player_1" v-model="player1" placeholder="(X)  Player_1" required=""  />
-      <br>
-      <input type="text" class="form-control" name="player_2" v-model="player2" placeholder="(O)  Player_2" required=""/>
-      <br>      
-      <button  type='submit' class="btn btn-lg btn-primary btn-block">Play!</button>   
-    </form>
-  </div>
- 
- {{couple_id}}<Game/>
-  <div v-if="hide"> 
-     
-    
-  </div>
-
+		</form>
+	</div>
+	
+	<div v-else> 
+		<Game :player1="player1" :player2="player2" :couple="couple_id" />
+		
+	</div>
+	
 </template>
 
 <script>
@@ -35,19 +35,19 @@ export default {
     let hide = ref(false);
     let player1 = ref("");
     let player2 = ref("");
-    let couple_id=ref("");
+    let couple_id = ref("");
 
-    function addCouple() {
-      axios.post("api/add-couple", {
-        player_1: player1.value,
-        player_2: player2.value
-      }).then(function (response) {
-        couple_id.value=response.data.last_insert_id;
-        console.log(couple_id.value)
-      });
-      hide.value=true;
-      
-    }
+    const addCouple = async () => {
+      await axios
+        .post("api/couple/add", {
+          player_1: player1.value,
+          player_2: player2.value
+        })
+        .then(function(response) {
+          couple_id.value = response.data.last_insert_id;
+        });
+      hide.value = true;
+    };
 
     return {
       addCouple,

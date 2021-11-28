@@ -10,12 +10,10 @@ class Game extends Model
     use HasFactory;
 
     protected $fillable=['couple_id',
-                         'player_1',
-                         'player_2',
                          'result',
-                         'moves',
-                         'added_at'
+                         'moves'
                         ];
 
+    protected $primaryKey = 'id';
     public $timestamps = false;
 }

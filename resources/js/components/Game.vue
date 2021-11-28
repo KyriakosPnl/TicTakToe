@@ -1,25 +1,29 @@
 <template>
-    <div v-if="!gameOver" id="board">
+	<div v-if="!gameOver" id="board">
+		
+		<div class="square" v-for="n in 9" v-bind:key="n" @click="clickedSquare(n)">
+			{{square[n]}}
+		</div>
+		
+	</div>
+	<div v-else id="result">
+		<button @click="playAgain()" class="btn btn-lg btn-primary btn-block">Play again!</button> 
+		<div><h2>Reload Page to play with diferrent players!</h2></div>
+		<LastGameModal :couple="couple"  />
+	</div> 
 
-        <div class="square" v-for="n in 9" v-bind:key="n" @click="clickedSquare(n)">
-            {{square[n]}}
-        </div>
-
-    </div>
-    <div v-else id="result">
-     <button @click="playAgain()" class="btn btn-lg btn-primary btn-block">Play again!</button> 
-      <div>Reload Page to play with diferrent players!</div>
-    </div> 
-    
-    <button  class="btn btn-lg btn-primary btn-block">Show Last Game</button> 
 </template>
 
 <script>
+import LastGameModal from "./LastGameModal.vue";
 import { ref } from "vue";
-//import { computed } from "vue"
+import axios from "axios";
 
 export default {
   name: "App",
+  components: {
+    LastGameModal
+  },
 
   setup(props) {
     let currentTurn = "X";
@@ -28,8 +32,11 @@ export default {
     let result = ref("");
     let player1 = ref("");
     let player2 = ref("");
-    let moves = [];
+    let couple = ref("");
+    
 
+    let moves = [];
+    couple.value = `${props.couple}`;
     player1.value = `${props.player1}`;
     player2.value = `${props.player2}`;
 
@@ -41,11 +48,10 @@ export default {
       if (square.value[n] !== "") {
         return;
       }
+
       moves.push(n);
       square.value[n] = currentTurn;
-
       resultCheck();
-      console.log("hh" + moves);
 
       currentTurn === "X" ? (currentTurn = "O") : (currentTurn = "X");
     }
@@ -82,11 +88,23 @@ export default {
         result.value = "Tie";
       }
       if (gameOver.value) {
-        if (!window.confirm(result.value != "Tie" ? result.value + " wins!!!" : "It's a tie!")){
-          return;
-        }
+        addGame();
+        window.confirm(
+          result.value != "Tie" ? result.value + " wins!!!" : "It's a tie!"
+        );
       }
     }
+
+    const addGame = async () => {
+      await axios
+        .post("api/game/add", {
+          couple_id: couple.value,
+          result: result.value,
+          moves: moves
+        })
+        .then(function(response) {});
+    };
+
     function playAgain() {
       for (let i = 0; i < square.value.length; i++) {
         square.value[i] = "";
@@ -96,9 +114,18 @@ export default {
       currentTurn = "X";
       result.value = "";
     }
-    return { gameOver, square, clickedSquare, result, playAgain };
+
+       
+    return {
+      gameOver,
+      square,
+      clickedSquare,
+      result,
+      playAgain
+     
+    };
   },
-  props: ["player1", "player2"]
+  props: ["player1", "player2", "couple"]
 };
 </script>
 
@@ -106,13 +133,13 @@ export default {
 #board {
   height: 400px;
   width: 400px;
-  margin: 50px auto;  
+  margin: 50px auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
 }
 .square {
-  box-sizing:border-box;
+  box-sizing: border-box;
   display: inline-block;
   font-family: Verdana, Tahoma, sans-serif;
   text-align: center;
@@ -124,9 +151,8 @@ export default {
   border-radius: 14px;
   width: 30%;
   background-color: rgb(96, 161, 158);
-  
 }
-.btn{
-    width: 30%
-}     
+.btn {
+  width: 30%;
+}
 </style>

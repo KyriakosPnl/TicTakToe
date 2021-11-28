@@ -17,5 +17,3 @@ use App\Http\Controllers\CoupleController;
 Route::get('/', function () {
     return view('home');
 });
-//Route::get('add-couple', [CoupleController::class, 'index']);
-//Route::post('/add-couple', [CoupleController::class, 'store'])->name('add-couple');
